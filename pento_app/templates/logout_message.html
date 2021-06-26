@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% load static }
+
+{% block content %}
+
+    <div class="logout_message">
+        <p>ログアウトしました。作業お疲れ様です。</p>
+        <a href="{% url 'account' %}"></a>
+    </div>
+
+{% endblock content %}

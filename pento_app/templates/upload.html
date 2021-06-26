@@ -1,0 +1,34 @@
+{% extends 'Top.html' %}
+{% load static %}
+
+{% block header_menu %}
+<!--ログイン後はメニューなし-->
+{% endblock header_menu %}
+
+{% block about_content %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'upload.css' %}">
+<script type="text/javascript" src="{% static 'upload.js' %}"></script>
+
+<div class="upload">
+
+    <h3 class="upload_title">イラスト投稿</h3>
+
+    <div class="upload_menu">
+
+        <form enctype="multipart/form-data" action="{% url 'pento_app:upload' %}" method="post">
+            {{form.as_p}}
+            {% csrf_token %}
+            <input type="submit" value="投稿">
+            {{ form.media }}
+        </form>
+
+        <img id="file-preview">
+
+    </div>
+
+    <a href="{% url 'pento_app:timeline' %}"><p>ホームへ戻る</p></a>
+
+</div>
+
+{% endblock about_content %}

@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load bootstrap4 %}
+{% block Title %}<title>PENTO-ARTS | 本登録</title>{% endblock Title %}
+
+
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'style.css' %}">
+
+<div class="verfication_messages">
+    {% if confirmation %}
+        <p>ユーザー登録を確定するには下のボタンを押してください。</p>
+        <form method="post" action="{% url 'account_confirm_email' confirmation.key %}">
+        {% csrf_token %}
+        <div class="form-content">
+            <button type="submit" class="btn btn-info btn-block">確定</button>
+        </div>
+        </form>
+    {% else %}
+        {% url 'account_email' as email_url %}
+        <p>リンクの有効期限が過ぎています。<a> href="{{ email_url }}"</a>.</p>
+    {% endif %}
+</div>
+
+{% endblock content %}

@@ -1,0 +1,49 @@
+{% extends 'Top.html' %}
+{% load static %}
+
+{% block Title %}<title>PENTO-ARTS | プロフィール</title>{% endblock Title %}
+
+{% block about_content %}
+
+    <link rel="stylesheet" href="{% static 'profile_detail.css' %}">
+
+    <div class="form-content">
+
+        {% if messages %}
+        <ul>
+            {% for message in messages %}
+                <li class="message_fontcolor">{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+
+        <h1>{{ customuser.username }}</h1>
+        <p class="mt-5"><img src="{% if customuser.thumbnail %}{{ customuser.thumbnail.url }}{% else %}{% static 'no_photo.png' %}{% endif %}" class="rouded-circle profile-photo"></p>
+        <p class="mt-5">{% if customuser.description %}{{ customuser.description | linebreaks }}{% else %}本文はありません{% endif %}</p>
+    </div>
+
+    <div class="button_field">
+
+        {% if user.username == username %}
+            <a href="{% url 'pento_app:edit' username %}" class="btn btn-info">プロフィール編集</a>
+        {% elif connected %}
+            <a href="{% url 'pento_app:unfollow' username %}" class="btn btn-dark">フォロー解除</a>
+        {% else %}
+            <a href="{% url 'pento_app:follow' username %}" class="btn btn-light">フォロー</a>
+        {% endif %}
+
+    </div>
+
+    <div class="follow_count">
+        <ul>
+            <li>
+                <p>フォロー数</p><h2>{{ following }}</h2>
+            </li>
+            <li>
+                <p>フォロワー数</p><h2>{{ follower }}</h2>
+            </li>
+        </ul>
+    </div>
+    
+
+{% endblock about_content %}

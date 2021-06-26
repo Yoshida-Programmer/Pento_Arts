@@ -1,0 +1,1 @@
+$(".upload").hide().fadeIn();

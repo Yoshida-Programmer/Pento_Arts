@@ -1,0 +1,30 @@
+{% extends 'Top.html' %}
+{% load static %}
+{% load bootstrap4 %}
+
+{% block Title %}<title>PENTO-ARTS | プロフィール編集</title>{% endblock Title %}
+
+{% block about_content %}
+
+    <link rel="stylesheet" href="{% static 'edit.css' %}">
+
+    <div class="container">
+        <div class="profile_edit">
+            <h1 class="mb-4">プロフィール</h1>
+            {% if messages %}
+                <ul>
+                    {% for message in messages %}
+                        <li class="message_fontcolor">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+            <div class="card-body">
+                <form method="POST" action="edit" enctype="multipart/form-data"> 
+                    {% csrf_token %}
+                    {% bootstrap_form form %}
+                    <button class="btn btn-info btn-block" type="submit">保存</button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock about_content %}

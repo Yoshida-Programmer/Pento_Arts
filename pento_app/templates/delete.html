@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'delete.css' %}">
+
+<div class="content">
+    <section class="del">
+        <div class="del-body">
+          <div class="container">
+            <h1>退会画面</h1>
+          </div>
+        </div>
+      </section>
+      
+      <form role="form" method="post">
+        {% csrf_token %}
+        <p>あなたのアカウント「@{{ user.username }}」を、本当に削除してもよろしいですか？</p>
+      
+        <button type="submit" class="button is-danger">削除</button>
+        <a href="javascript:void(0);" onclick="window.history.back();" class="button is-text">キャンセル</a>
+      </form>
+</div>
+
+{% endblock content %}

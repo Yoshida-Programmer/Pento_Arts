@@ -1,0 +1,13 @@
+.setting-list {
+    text-align: center;
+    font-size: 40px;
+}
+
+.setting-list ul {
+    margin-top: 50%;
+    text-decoration: none;
+}
+
+.setting-list a {
+    text-decoration: none;
+}

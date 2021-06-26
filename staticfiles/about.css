@@ -1,0 +1,39 @@
+.container::after{
+    content: "";
+    display: block;
+    clear: both;
+}
+
+.about_sidemenu{
+    float: left;
+    width: 30%;
+    text-align: center;
+    font: normal bold 20px/50px serif;
+    margin-top: 60px;
+}
+
+.about_sidemenu ul{
+    text-decoration: none;
+}
+
+.about_sidemenu a:hover { 
+    color: white; background-color: royalblue;
+}
+
+.about_sidemenu ul li a {
+	color: #3F51B5;
+	font-weight: bold;
+	text-decoration: none;
+	display: block;
+	padding: .4em 1.2em;
+	border-bottom: 1px dotted #3F51B5;
+}
+
+.about{
+    float: left;
+    width: 70%;
+}
+
+.content_1{
+    margin: 50px;
+}

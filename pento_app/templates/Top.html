@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'Top.css' %}">
+
+<div class="container">
+
+    <!-- サイドメニュー全般 -->
+    <div class="sidemenu">
+
+        <!-- アイコン画像 -->
+        <div class="circle-image">
+            <img src="{% if user.thumbnail %}{{ user.thumbnail.url }}{% else %}{% static 'no_photo.png' %}{% endif %}" width="200" height="200" class="rounded-circle post-photo">
+        </div>
+
+        <!-- サイドメニューリスト -->
+        <ul class="menu_list">
+            <li>
+                <a href="{% url 'pento_app:index' %}"><p>タイムライン</p></a>
+            </li>
+            <li>
+                <a href="{% url 'pento_app:detail' user.username %}"><p>プロフィール</p></a>
+            </li>
+            <li>
+                <a href="{% url 'pento_app:settings' %}"><p>ユーザー詳細設定</p></a>
+            </li>
+            <li>
+                <a href="{% url 'account_logout' %}"><p>ログアウト</p></a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- つぶやきライン -->
+    <div class="Top_contents">
+        {% block about_content %}
+            
+        {% endblock about_content %}
+    </div>
+    
+</div>
+
+
+{% endblock content %}

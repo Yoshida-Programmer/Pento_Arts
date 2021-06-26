@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load bootstrap4 %}
+
+{% block Title %}<title>PENTO-ARTS | 確認メール送信完了</title>{% endblock Title %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'style.css' %}">
+
+
+
+    {% if messages %}
+
+        <ul>
+            {% for message in messages %}
+                <li class="verfication_messages">{{ message }}</li>
+            {% endfor %}
+        </ul>
+
+    {% endif %}
+   
+        <p class="verfication_messages">受信ボックスを確認してください。</p> 
+
+
+{% endblock content %}
