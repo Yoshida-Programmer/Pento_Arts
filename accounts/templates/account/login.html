@@ -23,7 +23,9 @@
     {% bootstrap_form form %}
     <button class="btn btn-info btn-block" type="submit">ログイン</button>
     <p class="mt-3"><a href="{% url 'account_signup' %}" class="text-info">新規登録はこちら</a></p>
-    <p class="mt-3"><a href="{% url 'account_reset_password' %}" class="text-info">パスワードをお忘れですか？</a></p>
+    <!--※パスワードリセット機能は一旦保留
+      <p class="mt-3"><a href="{% url 'account_reset_password' %}" class="text-info">パスワードをお忘れですか？</a></p>
+    -->
   </form>
 </div>
 {% endblock content %}
