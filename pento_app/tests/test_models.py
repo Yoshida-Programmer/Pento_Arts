@@ -27,6 +27,6 @@ class TimeLineTestCase(TestCase):
         self.assertEqual(response.status_code, 200) 
 
         #最新の投稿を取得し、テストユーザーの投稿であることをチェック
-        client.post('/create/', {'text':'テスト投稿', 'photo':''})
+        client.post('/create/', {'text':'テスト投稿', })
         latest_post = Post.objects.latest('created_at')
         self.assertEqual(latest_post.text, 'テスト投稿')
