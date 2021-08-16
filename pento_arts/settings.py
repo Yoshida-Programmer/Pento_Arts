@@ -21,10 +21,10 @@ REPOSITORY_ROOT = os.path.dirname(BASE_DIR)
 SECRET_KEY = 'v0h+s=#9_a^gxs+7=oto*nv=i+7x0_72___8s)sxlhi#sx1f9*'
 
 #デバッグモードを有効化。エラー発生時にブラウザ上にエラーの詳細情報を表示する。
-DEBUG = True
+DEBUG = False
 
 #サーバが受理するサーバアドレスを指定する。この値を正確に記述することは「Hostヘッダインジェクション攻撃」に対して有効
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ["kentaro-test-app.herokuapp.com", "*"]
 
 
 # Application definition
@@ -89,6 +89,10 @@ DATABASES = {
     }
 }
 
+import dj_database_url
+db_from_env = dj_database_url.config()
+DATABASES['default'].update(db_from_env)
+
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -134,9 +138,6 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 MEDIA_ROOT = BASE_DIR.joinpath('media')
 MEDIA_URL = '/media/'
 
-# 暗号化されたhttpsを使うようにする
-#SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-#SECURE_SSL_REDIRECT = True
 
 #プロジェクト全体で使用するUserモデル
 AUTH_USER_MODEL = 'pento_app.CustomUser'

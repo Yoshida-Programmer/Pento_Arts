@@ -1,0 +1,34 @@
+#header {
+    background: #bbffc9;
+    color: rgb(0, 0, 0);
+  }
+  
+  body {
+    background: #ffffff;
+  }
+  
+  h1 {
+    color: #0c2d48;
+  }
+
+  .breadcrumbs {
+    background-color: #ffffff;
+    color: black;
+  }
+  
+  #header a:link, #header a:visited {
+    color: rgb(0, 0, 0);
+  }
+  #branding h1, #branding h1 a:visited, #branding h1 a:link {
+    color: rgb(0, 0, 0);
+  }
+  
+  .module h2, .module caption, .inline-group h2 {
+    background: #bbffc9;
+    color: rgb(0, 0, 0);
+  }
+  
+  a.section:link, a.section:visited {
+    color: rgb(0, 0, 0);
+  }
+  
