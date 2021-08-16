@@ -11,8 +11,6 @@ import os
 from pathlib import Path
 import django_heroku
 
-django_heroku.settings(locals())
-
 # プロジェクトのベースフォルダを示す
 BASE_DIR = Path(__file__).resolve().parent.parent
 REPOSITORY_ROOT = os.path.dirname(BASE_DIR)
@@ -179,3 +177,5 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 #メールに記載するサイトのURLを設定
 FRONTEND_URL = "http://127.0.0.1:8000/"
+
+django_heroku.settings(locals())
