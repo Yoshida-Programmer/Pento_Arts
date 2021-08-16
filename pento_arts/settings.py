@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 from pathlib import Path
+# django_herokuは読み込んでおきます。
 import django_heroku
 
 # プロジェクトのベースフォルダを示す
@@ -20,6 +21,7 @@ REPOSITORY_ROOT = os.path.dirname(BASE_DIR)
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
+# 今回はそのままベタ貼りしてますが、.envファイル等に記述しておくのが好ましいです。
 SECRET_KEY = 'v0h+s=#9_a^gxs+7=oto*nv=i+7x0_72___8s)sxlhi#sx1f9*'
 
 #デバッグモードを有効化。エラー発生時にブラウザ上にエラーの詳細情報を表示する。
@@ -83,7 +85,7 @@ TEMPLATES = [
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 WSGI_APPLICATION = 'pento_arts.wsgi.application'
 
-
+# heroku側のDBはPostgreqlが推奨されているので、heroku側に合わせて設定します。
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -95,9 +97,9 @@ DATABASES = {
     }
 }
 
-
 import dj_database_url
 
+# DATABASESの欄で空欄のところは、おそらくこの2行で上書きしているのだと思います。
 db_from_env = dj_database_url.config(conn_max_age=600, ssl_require=True)
 DATABASES['default'].update(db_from_env)
 
@@ -138,6 +140,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
+# 静的ファイルはこのように設定後、ターミナルで python manage.py collectstatic を実行してください。こうすることで、staticfilesディレクトリに静的ファイルが集められます。
+# また、デプロイする時に、 python manage.py collectstatic が自動で実行されるのですが、これはもう手元で完了しているため、 heroku config:set DISABLE_COLLECTSTATIC=1 を実行して動作しないようにしてください。
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
@@ -178,4 +182,9 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 #メールに記載するサイトのURLを設定
 FRONTEND_URL = "http://127.0.0.1:8000/"
 
+# この行は一番下に書いてください。
 django_heroku.settings(locals())
+# デプロイが完了したら、
+# heroku run python manage.py migrate
+# heroku run python manage.py createsuperuser
+# を実行してください。 heroku openでアプリが開けます。
