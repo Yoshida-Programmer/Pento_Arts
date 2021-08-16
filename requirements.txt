@@ -84,7 +84,6 @@ Pygments==2.9.0
 PyJWT==2.1.0
 pyparsing==2.4.7
 pyrsistent==0.18.0
-pysam==0.16.0.1
 python-dateutil==2.8.1
 python-dotenv==0.18.0
 python3-openid==3.2.0
