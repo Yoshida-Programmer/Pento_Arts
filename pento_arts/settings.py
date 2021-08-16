@@ -28,7 +28,7 @@ SECRET_KEY = 'v0h+s=#9_a^gxs+7=oto*nv=i+7x0_72___8s)sxlhi#sx1f9*'
 DEBUG = False
 
 #サーバが受理するサーバアドレスを指定する。この値を正確に記述することは「Hostヘッダインジェクション攻撃」に対して有効
-ALLOWED_HOSTS = ["kentaro-test-app.herokuapp.com", "*"]
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
