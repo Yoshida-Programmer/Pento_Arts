@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import CustomUser
+from .models import CustomUser,Connection
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.admin import AdminSite
 from . import models
@@ -18,6 +18,7 @@ class MyAdminSite(AdminSite):
 mypage_site = MyAdminSite(name="mypage")
 
 admin.site.register(CustomUser)
+admin.site.register(Connection)
 
 
 
