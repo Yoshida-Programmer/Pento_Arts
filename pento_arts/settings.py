@@ -23,6 +23,8 @@ REPOSITORY_ROOT = os.path.dirname(BASE_DIR)
 # .envファイルに以降予定
 SECRET_KEY = 'v0h+s=#9_a^gxs+7=oto*nv=i+7x0_72___8s)sxlhi#sx1f9*'
 
+#デバッグモードを有効化。エラー発生時にブラウザ上にエラーの詳細情報を表示する。
+DEBUG = False
 
 #サーバが受理するサーバアドレスを指定する。この値を正確に記述することは「Hostヘッダインジェクション攻撃」に対して有効
 ALLOWED_HOSTS = ["*"]
@@ -81,6 +83,24 @@ TEMPLATES = [
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 WSGI_APPLICATION = 'pento_arts.wsgi.application'
+
+# heroku側のDBはPostgreqlが推奨されているので、heroku側に合わせて設定
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'name',
+        'USER': 'user',
+        'PASSWORD': '',
+        'HOST': 'host',
+        'PORT': '',
+    }
+}
+
+import dj_database_url
+
+# DATABASESの欄で空欄のところは、おそらくこの2行で上書き
+db_from_env = dj_database_url.config(conn_max_age=600, ssl_require=True)
+DATABASES['default'].update(db_from_env)
 
 
 # Password validation
@@ -159,6 +179,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 #メールに記載するサイトのURLを設定
 FRONTEND_URL = "http://127.0.0.1:8000/"
 
+
+django_heroku.settings(locals())
 
 # デプロイ後の流れ
 # heroku run python manage.py migrate
