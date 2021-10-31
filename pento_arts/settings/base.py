@@ -158,6 +158,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 #メールに記載するサイトのURLを設定
 FRONTEND_URL = "http://127.0.0.1:8000/"
 
+django_heroku.settings(locals())
+
 # デプロイ後の流れ
 # heroku run python manage.py migrate
 # heroku run python manage.py createsuperuser
