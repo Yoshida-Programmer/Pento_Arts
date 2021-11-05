@@ -2,3 +2,4 @@ Prockfile
 sqlite3.exe
 Pipfile
 Pipfile.lock
+local_settings.py

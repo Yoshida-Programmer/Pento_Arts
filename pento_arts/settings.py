@@ -10,6 +10,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 import os
 from pathlib import Path
 import django_heroku
+import dj_database_url
 
 # プロジェクトのベースフォルダを示す
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,8 +21,6 @@ REPOSITORY_ROOT = os.path.dirname(BASE_DIR)
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
-# .envファイルに以降予定
-SECRET_KEY = 'v0h+s=#9_a^gxs+7=oto*nv=i+7x0_72___8s)sxlhi#sx1f9*'
 
 #デバッグモードを有効化。エラー発生時にブラウザ上にエラーの詳細情報を表示する。
 DEBUG = False
@@ -95,13 +94,6 @@ DATABASES = {
         'PORT': '',
     }
 }
-
-import dj_database_url
-
-# DATABASESの欄で空欄のところは、おそらくこの2行で上書き
-db_from_env = dj_database_url.config(conn_max_age=600, ssl_require=True)
-DATABASES['default'].update(db_from_env)
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -179,8 +171,18 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 #メールに記載するサイトのURLを設定
 FRONTEND_URL = "http://127.0.0.1:8000/"
 
+try:
+    from .local_settings import *
+except ImportError:
+    pass
 
-django_heroku.settings(locals())
+if not DEBUG:
+    SECRET_KEY = os.environ['SECRET_KEY']
+    import django_heroku
+    django_heroku.settings(locals())
+
+db_from_env = dj_database_url.config(conn_max_age=600, ssl_require=True)
+DATABASES['default'].update(db_from_env)
 
 # デプロイ後の流れ
 # heroku run python manage.py migrate
