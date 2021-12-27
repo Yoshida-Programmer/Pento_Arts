@@ -22,18 +22,36 @@ from .helpers import get_current_user
 
 User = get_user_model()
 
-"""プロフィール編集ページ"""
-class ProfileEdit(LoginRequiredMixin, SuccessMessageMixin, generic.UpdateView):
-    model = CustomUser
-    form_class = ProfileForm
-    template_name = 'edit.html'
-    success_url = 'edit'
-    success_message = 'プロフィールを更新しました。'
+"""------------------タイムライン------------------------------------------------------------"""
+class IndexView(LoginRequiredMixin, generic.ListView):
+    template_name = 'index.html'
+    paginate_by = 10
 
-    def get_object(self):
-        return self.request.user
+    def get_queryset(self):
+        posts = Post.objects.order_by('-created_at')
+        return posts
 
-"""プロフィール画面"""
+"""------------------ツイート投稿------------------------------------------------------------"""
+class CreateView(LoginRequiredMixin, generic.CreateView):
+    form_class = PostForm
+    success_url = reverse_lazy('pento_app:index')
+
+    #投稿成功時の処理
+    def form_valid(self, form):
+        form.instance.author_id = self.request.user.id
+        messages.success(self.request, '投稿が完了しました。')
+        return super(CreateView, self).form_valid(form)
+
+    #投稿失敗時の処理
+    def form_invalid(self, form):
+        if form:
+            messages.warning(self.request, '空白では投稿できません！')
+            return redirect('pento_app:index')
+        else:
+            messages.warning(self.request, '投稿が失敗しました。')
+            return redirect('pento_app:index')
+
+"""------------------プロフィール画面------------------------------------------------------------"""
 class ProifileDetail(LoginRequiredMixin, generic.DetailView):
     model = CustomUser
     template_name = 'detail.html'
@@ -55,7 +73,43 @@ class ProifileDetail(LoginRequiredMixin, generic.DetailView):
 
         return context
 
-"""フォロー"""
+"""------------------プロフィール編集ページ------------------------------------------------------"""
+class ProfileEdit(LoginRequiredMixin, SuccessMessageMixin, generic.UpdateView):
+    model = CustomUser
+    form_class = ProfileForm
+    template_name = 'edit.html'
+    success_url = 'edit'
+    success_message = 'プロフィールを更新しました。'
+
+    def get_object(self):
+        return self.request.user
+
+"""------------------投稿削除--------------------------------------------------------------------"""
+class DeleteView(LoginRequiredMixin, generic.DeleteView):
+    model = Post
+    success_url = reverse_lazy('pento_app:index')
+
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        if self.object.author == request.user:
+            messages.success(self.request, '削除しました。')
+            return super().delete(request, *args, **kwargs)
+
+"""------------------『いいね』機能---------------------------------------------------------------"""
+class LikeView(LoginRequiredMixin, generic.View):
+    model = Like
+
+    def post(self, request):
+        post_id = request.POST.get('id')
+        post = Post.objects.get(id=post_id)
+        like = Like(user=self.request.user,post=post)
+        like.save()
+        like_count = Like.objects.filter(post=post).count()
+        data = {'message': '『いいね』しました',
+                'like_count': like_count}
+        return JsonResponse(data)
+
+"""------------------フォロー---------------------------------------------------------------------"""
 @login_required
 def follow_view(request, *args, **kwargs):
 
@@ -78,7 +132,7 @@ def follow_view(request, *args, **kwargs):
 
     return HttpResponseRedirect(reverse_lazy('pento_app:detail', kwargs={'username': following.username}))
 
-"""フォロー解除"""
+"""------------------フォロー解除-----------------------------------------------------------------"""
 @login_required
 def unfollow_view(request, *args, **kwargs):
     
@@ -99,57 +153,8 @@ def unfollow_view(request, *args, **kwargs):
 
     return HttpResponseRedirect(reverse_lazy('pento_app:detail', kwargs={'username': following.username}))
 
-"""インデックス（全ユーザー表示）"""
-class IndexView(LoginRequiredMixin, generic.ListView):
-    template_name = 'index.html'
-    paginate_by = 10
 
-    def get_queryset(self):
-        posts = Post.objects.order_by('-created_at')
-        return posts
-
-"""タイムライン表示"""
-class CreateView(LoginRequiredMixin, generic.CreateView):
-    form_class = PostForm
-    success_url = reverse_lazy('pento_app:index')
-
-    #投稿成功時の処理
-    def form_valid(self, form):
-        form.instance.author_id = self.request.user.id
-        messages.success(self.request, '投稿が完了しました。')
-        return super(CreateView, self).form_valid(form)
-
-    #投稿失敗時の処理
-    def form_invalid(self, form):
-        messages.warning(self.request, '投稿が失敗しました。')
-        return redirect('pento_app:timeline')
-
-"""投稿削除"""
-class DeleteView(LoginRequiredMixin, generic.DeleteView):
-    model = Post
-    success_url = reverse_lazy('pento_app:index')
-
-    def delete(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        if self.object.author == request.user:
-            messages.success(self.request, '削除しました。')
-            return super().delete(request, *args, **kwargs)
-
-"""『いいね』機能"""
-class LikeView(LoginRequiredMixin, generic.View):
-    model = Like
-
-    def post(self, request):
-        post_id = request.POST.get('id')
-        post = Post.objects.get(id=post_id)
-        like = Like(user=self.request.user,post=post)
-        like.save()
-        like_count = Like.objects.filter(post=post).count()
-        data = {'message': '『いいね』しました',
-                'like_count': like_count}
-        return JsonResponse(data)
-
-"""他ユーザーからのアクセスを制限"""
+"""------------------他ユーザーからのアクセスを制限------------------------------------------------"""
 class OnlyYouMixin(UserPassesTestMixin):
     raise_exception = True
 
@@ -157,7 +162,7 @@ class OnlyYouMixin(UserPassesTestMixin):
         user = self.request.user
         return user.username == self.kwargs['username'] or user.is_superuser
 
-"""退会機能"""
+"""------------------退会機能----------------------------------------------------------------------"""
 class UserDeleteView(OnlyYouMixin, generic.DeleteView):
     template_name = "delete.html"
     success_url = reverse_lazy("account_login")
@@ -165,10 +170,9 @@ class UserDeleteView(OnlyYouMixin, generic.DeleteView):
     slug_field = 'username'
     slug_url_kwarg = 'username'
 
-"""ユーザー詳細設定"""
+"""------------------ユーザー詳細設定---------------------------------------------------------------"""
 class SettingListView(TemplateView):
     template_name = "settings.html"
-
 
 
 edit = ProfileEdit.as_view()
